@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+      http://www.springframework.org/schema/beans/spring-beans.xsd
+      http://www.springframework.org/schema/context
+      http://www.springframework.org/schema/context/spring-context-4.0.xsd
+      http://www.springframework.org/schema/aop
+      http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+
+    <context:component-scan base-package="com.demo.**"/>
+    <!--<bean id="user" class="com.demo.entity.User">
+        &lt;!&ndash;根据构造器&ndash;&gt;
+        &lt;!&ndash;<constructor-arg type="int" value="1"></constructor-arg>
+        <constructor-arg type="java.lang.String" value="老王" ></constructor-arg>&ndash;&gt;
+
+        &lt;!&ndash;根据属性&ndash;&gt;
+        <property name="id" value="2"/>
+        <property name="name" value="laowang"/>
+    </bean>
+
+    <bean id="userFather" class="com.demo.entity.UserFather">
+        <property name="fname" value="laodie"/>
+        <property name="user" ref="user"/>
+    </bean>
+
+    <bean id="userMother" class="com.demo.entity.UserMother">
+        <property name="mName" value="laoma"/>
+        <property name="list" >
+            <list>
+                <value>a</value>
+                <value>b</value>
+            </list>
+        </property>
+        <property name="map">
+            <map>
+                <entry key="aa" value="AA"/>
+                <entry key="bb" value="BB"/>
+            </map>
+        </property>
+
+    </bean>-->
+
+
+
+<!--注解方式-->
+    <!--<aop:aspectj-autoproxy/>-->
+    <!--xml配置方式-->
+    <bean id="loger" class="com.demo.aop.Logger"></bean>
+    <aop:config >
+        <aop:aspect id="LogAspect" ref="loger">
+            <aop:around method="doLog" pointcut="execution(* com.demo.service.*.*(..))"/>
+        </aop:aspect>
+    </aop:config>
+
+
+</beans>

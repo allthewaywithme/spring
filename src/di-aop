@@ -1,0 +1,82 @@
+DI:
+1：引入jar包
+2：创建User,UserFather,UserMother,UserService,UserServiceImpl,UserController
+3: 创建application-context.xml
+以下为通过反射实例配置获取对象
+<bean id="user" class="com.demo.entity.User">
+        &lt;!&ndash;根据构造器&ndash;&gt;
+        &lt;!&ndash;<constructor-arg type="int" value="1"></constructor-arg>
+        <constructor-arg type="java.lang.String" value="老王" ></constructor-arg>&ndash;&gt;
+
+        &lt;!&ndash;根据属性&ndash;&gt;
+        <property name="id" value="2"/>
+        <property name="name" value="laowang"/>
+    </bean>
+
+    <bean id="userFather" class="com.demo.entity.UserFather">
+        <property name="fname" value="laodie"/>
+        <property name="user" ref="user"/>
+    </bean>
+
+    <bean id="userMother" class="com.demo.entity.UserMother">
+        <property name="mName" value="laoma"/>
+        <property name="list" >
+            <list>
+                <value>a</value>
+                <value>b</value>
+            </list>
+        </property>
+        <property name="map">
+            <map>
+                <entry key="aa" value="AA"/>
+                <entry key="bb" value="BB"/>
+            </map>
+        </property>
+    </bean>
+
+    以下为通过包扫描配置实例
+    <context:component-scan base-package="com.demo.**"/>
+
+4：创建Main
+ApplicationContext context=new ClassPathXmlApplicationContext("./com/demo/resource/application-context.xml");
+       /* User user =context.getBean(User.class);
+        System.out.println(user.getId());
+        UserFather bean = context.getBean(UserFather.class);
+        bean.getFname();
+        UserMother m = context.getBean(UserMother.class);
+        m.getmName();*/
+        UserController c = context.getBean(UserController.class);
+        UserService userService = c.getUserService();
+        userService.say("aa");
+        测试...
+
+AOP:
+注解方式：
+application-context.xml里配置
+<aop:aspectj-autoproxy/>
+创建UserAspect类
+通过Main 测试
+ApplicationContext context=new ClassPathXmlApplicationContext("./com/demo/resource/application-context.xml");
+        UserController c = context.getBean(UserController.class);
+        UserService userService = c.getUserService();
+        userService.say("aa");
+        测试...
+
+
+xml配置方式：
+创建Logger类
+application-context.xml里配置
+<!--xml配置方式-->
+    <bean id="loger" class="com.demo.aop.Logger"></bean>
+    <aop:config >
+        <aop:aspect id="LogAspect" ref="loger">
+            <aop:around method="doLog" pointcut="execution(* com.demo.service.*.*(..))"/>
+        </aop:aspect>
+    </aop:config>
+
+通过Main 测试
+ApplicationContext context=new ClassPathXmlApplicationContext("./com/demo/resource/application-context.xml");
+        UserController c = context.getBean(UserController.class);
+        UserService userService = c.getUserService();
+        userService.say("aa");
+        测试...
